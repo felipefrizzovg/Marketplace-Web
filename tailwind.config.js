@@ -51,6 +51,31 @@ module.exports = {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
         },
+        orange: {
+          base: '#f24d0d',
+          dark: '#c43c08',
+        },
+        blue: {
+          light: '#d7eff9',
+          base: '#5ec5fd',
+          dark: '#009cf0',
+        },
+        shape: {
+          white: '#fff',
+          background: '#fbf4f4',
+          shape: '#f5eaea',
+        },
+        grayScale: {
+          100: '#adadad',
+          200: '#949494',
+          300: '#666666',
+          400: '#3d3d3d',
+          500: '#1d1d1d',
+        },
+        semantic: {
+          danger: '#dc3545',
+          success: '#28a745',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -70,6 +95,10 @@ module.exports = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+      },
+      fontFamily: {
+        sans: 'DM Sans, sans-serif;',
+        poppins: 'Poppins, sans-serif;',
       },
     },
   },
