@@ -7,7 +7,7 @@ import { Button } from './ui/button'
 
 export function Header() {
   return (
-    <header className="flex items-center justify-between bg-shape-background px-5 py-4">
+    <header className="flex items-center justify-between border-b-2 border-shape-shape bg-shape-background px-5 py-4">
       <img src={logo} alt="" className="h-10 w-14" />
       <nav className="flex items-center justify-center gap-2">
         <NavLink to="/">
