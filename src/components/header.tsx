@@ -4,6 +4,7 @@ import logo from '@/assets/logo.svg'
 
 import { NavLink } from './nav-link'
 import { Button } from './ui/button'
+import { Link } from 'react-router-dom'
 
 export function Header() {
   return (
@@ -20,10 +21,12 @@ export function Header() {
         </NavLink>
       </nav>
       <div className="flex items-center gap-4">
-        <Button className="flex items-center justify-center gap-2 rounded-lg bg-orange-base px-4 text-shape-shape">
-          <Plus />
-          Novo produto
-        </Button>
+        <Link to="/products">
+          <Button className="flex items-center justify-center gap-2 rounded-lg bg-orange-base px-4 text-shape-shape hover:bg-orange-dark">
+            <Plus />
+            Novo produto
+          </Button>
+        </Link>
 
         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-shape-shape">
           <img src="" alt="" />
