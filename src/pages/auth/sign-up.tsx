@@ -1,13 +1,18 @@
-import { ArrowRight, ImageUp } from 'lucide-react'
+import { useMutation } from '@tanstack/react-query'
+import { ArrowRight } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
 import { useForm } from 'react-hook-form'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
 
+import { registerUser } from '@/api/register-user'
+import { uploadImages } from '@/api/upload-images'
 import { Button } from '@/components/ui/button'
 
-const signUpForm = z.object({
+import { FileUpload, FileUploadForm, fileUploadForm } from './file-upload'
+
+const signUpFormInputs = z.object({
   name: z.string(),
   phone: z.string(),
   email: z.string().email(),
@@ -16,24 +21,77 @@ const signUpForm = z.object({
   passwordConfirmation: z.string(),
 })
 
+type SignUpFormInputs = z.infer<typeof signUpFormInputs>
+
+const signUpForm = z.object({
+  data: signUpFormInputs,
+  fileData: fileUploadForm,
+})
+
 type SignUpForm = z.infer<typeof signUpForm>
 
 export function SignUp() {
+  const navigate = useNavigate()
+
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<SignUpForm>()
 
-  async function handleSignUp(data: SignUpForm) {
+  const { mutateAsync: registerUserFn } = useMutation({
+    mutationFn: registerUser,
+  })
+
+  const { mutateAsync: uploadImagesFn } = useMutation({
+    mutationFn: uploadImages,
+  })
+
+  async function handleFileUpload(data: FileUploadForm) {
     try {
-      console.log(data)
+      if (data.file?.length && data.file.length > 0) {
+        const files = new FormData()
+        files.append('file', data.file[0])
 
-      await new Promise((resolve) => setTimeout(resolve, 2000))
+        const uploadedFiles = await uploadImagesFn({
+          files,
+        })
 
-      toast.success('Login realizado com sucesso')
-    } catch (e) {
-      toast.error('Credenciais inválidas')
+        console.log(uploadedFiles)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function handleSignUpInputs(data: SignUpFormInputs) {
+    try {
+      await registerUserFn({
+        name: data.name,
+        phone: data.phone,
+        email: data.email,
+        avatarId: data.avatarId,
+        password: data.password,
+        passwordConfirmation: data.passwordConfirmation,
+      })
+
+      toast.success('Usuário cadastrado com sucesso', {
+        action: {
+          label: 'Login',
+          onClick: () => navigate(`/sign-in?email=${data.email}`),
+        },
+      })
+    } catch {
+      toast.error('Erro ao cadastrar usuário')
+    }
+  }
+
+  async function handleSignUp({ data, fileData }: SignUpForm) {
+    try {
+      await handleSignUpInputs(data)
+      await handleFileUpload(fileData)
+    } catch (err) {
+      console.log(err)
     }
   }
 
@@ -58,16 +116,7 @@ export function SignUp() {
               <div className="flex flex-col gap-5">
                 <div className="flex flex-col">
                   <h3 className="mb-5 font-sans text-lg font-bold">Perfil</h3>
-                  <label className="flex h-[120px] w-[120px] cursor-pointer items-center justify-center rounded-xl bg-shape-shape p-11">
-                    <ImageUp className="h-8 w-8 text-orange-base" />
-                    <input
-                      id="avatarId"
-                      type="file"
-                      placeholder="Seu nome completo"
-                      className="hidden"
-                      {...register('avatarId')}
-                    />
-                  </label>
+                  <FileUpload />
                 </div>
 
                 <div className="flex flex-col">
@@ -82,7 +131,7 @@ export function SignUp() {
                     type="text"
                     placeholder="Seu nome completo"
                     className="border-b-2 p-3"
-                    {...register('name')}
+                    {...register('data.name')}
                   />
                 </div>
 
@@ -98,7 +147,7 @@ export function SignUp() {
                     type="text"
                     placeholder="(00) 00000-0000"
                     className="border-b-2 p-3"
-                    {...register('phone')}
+                    {...register('data.phone')}
                   />
                 </div>
               </div>
@@ -117,7 +166,7 @@ export function SignUp() {
                     type="email"
                     placeholder="Seu e-mail cadastrado"
                     className="border-b-2 p-3"
-                    {...register('email')}
+                    {...register('data.email')}
                   />
                 </div>
 
@@ -133,7 +182,7 @@ export function SignUp() {
                     type="password"
                     placeholder="Sua senha de acesso"
                     className="border-b-2 p-3"
-                    {...register('password')}
+                    {...register('data.password')}
                   />
                 </div>
 
@@ -149,7 +198,7 @@ export function SignUp() {
                     type="password"
                     placeholder="Confirme a senha"
                     className="border-b-2 p-3"
-                    {...register('passwordConfirmation')}
+                    {...register('data.passwordConfirmation')}
                   />
                 </div>
               </div>
