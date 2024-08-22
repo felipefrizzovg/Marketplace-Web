@@ -1,8 +1,6 @@
-import { ArrowLeft, Ban, Check } from 'lucide-react'
+import { ArrowLeft, Ban, Check, ImageUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
-import sofa from '@/assets/sofa.png'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -16,7 +14,7 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
-export function ProductInfo() {
+export function NewProduct() {
   return (
     <>
       <div className="flex justify-between gap-6">
@@ -56,14 +54,17 @@ export function ProductInfo() {
       </div>
 
       <div className="mt-10 flex gap-6">
-        <img className="h-[300px] w-[500px]" src={sofa} alt="" />
+        <label className="flex h-[300px] w-[500px] cursor-pointer flex-col items-center justify-center gap-4 rounded-[20px] bg-shape-shape">
+          <ImageUp className="h-10 w-10 text-orange-base" />
+          <span className="font-poppins text-sm text-grayScale-300">
+            Selecione a imagem do produto
+          </span>
+          <input type="file" className="hidden" />
+        </label>
         <Card className="flex grow flex-col gap-6 p-6">
           <CardHeader className="p-0">
             <CardTitle className="flex justify-between font-sans text-lg font-bold text-grayScale-300">
               Dados do produto
-              <Badge className="bg-blue-dark" variant="default">
-                Anunciado
-              </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent className="p-0">
@@ -74,14 +75,14 @@ export function ProductInfo() {
                     <Label className="font-poppins text-xs font-medium uppercase text-grayScale-300">
                       Título
                     </Label>
-                    <Input className="" />
+                    <Input placeholder="Nome do produto" className="" />
                   </div>
 
                   <div className="flex-1">
                     <Label className="font-poppins text-xs font-medium uppercase text-grayScale-300">
                       Valor
                     </Label>
-                    <Input />
+                    <Input placeholder="R$ 0,00" />
                   </div>
                 </div>
 
@@ -89,7 +90,7 @@ export function ProductInfo() {
                   <Label className="font-poppins text-xs font-medium uppercase text-grayScale-300">
                     Descrição
                   </Label>
-                  <Textarea />
+                  <Textarea placeholder="Escreva detalhes sobre o produto, tamanho, características" />
                 </div>
 
                 <div>
@@ -99,7 +100,7 @@ export function ProductInfo() {
                   <Select>
                     <SelectTrigger>
                       <SelectValue
-                        placeholder="Categoria"
+                        placeholder="Selecione"
                         className="placeholder:text-grayScale-200"
                       />
                     </SelectTrigger>
@@ -128,7 +129,7 @@ export function ProductInfo() {
                   Cancelar
                 </Button>
                 <Button className="flex-1 bg-orange-base text-white hover:bg-orange-dark">
-                  Salvar e atualizar
+                  Salvar e publicar
                 </Button>
               </div>
             </form>

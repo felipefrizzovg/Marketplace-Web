@@ -1,10 +1,10 @@
 import { ChartArea, Package, Plus } from 'lucide-react'
+import { Link } from 'react-router-dom'
 
 import logo from '@/assets/logo.svg'
 
 import { NavLink } from './nav-link'
 import { Button } from './ui/button'
-import { Link } from 'react-router-dom'
 
 export function Header() {
   return (
@@ -21,7 +21,7 @@ export function Header() {
         </NavLink>
       </nav>
       <div className="flex items-center gap-4">
-        <Link to="/products">
+        <Link to="/new-product">
           <Button className="flex items-center justify-center gap-2 rounded-lg bg-orange-base px-4 text-shape-shape hover:bg-orange-dark">
             <Plus />
             Novo produto

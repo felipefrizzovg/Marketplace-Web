@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AppLayout } from './pages/_layouts/app'
 import { AuthLayout } from './pages/_layouts/auth'
 import { Dashboard } from './pages/app/dashboard/dashboard'
+import { NewProduct } from './pages/app/products/new-product'
 import { ProductInfo } from './pages/app/products/product-info'
 import { Products } from './pages/app/products/products'
 import { SignIn } from './pages/auth/sign-in'
@@ -24,6 +25,10 @@ export const router = createBrowserRouter([
       {
         path: '/products-info',
         element: <ProductInfo />,
+      },
+      {
+        path: '/new-product',
+        element: <NewProduct />,
       },
     ],
   },
