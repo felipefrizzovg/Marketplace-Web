@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { ArrowRight } from 'lucide-react'
+import { useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -31,6 +32,8 @@ const signUpForm = z.object({
 export type SignUpForm = z.infer<typeof signUpForm>
 
 export function SignUp() {
+  const [registeredAvatarId, setRegisteredAvatarId] = useState('')
+
   const navigate = useNavigate()
 
   const methods = useForm<SignUpForm>()
@@ -56,6 +59,16 @@ export function SignUp() {
         })
 
         console.log(uploadedFiles, 'uploadedFiles')
+
+        if (
+          uploadedFiles &&
+          uploadedFiles.attachments &&
+          uploadedFiles.attachments[0]
+        ) {
+          setRegisteredAvatarId(uploadedFiles.attachments[0].id)
+        } else {
+          console.error('Error: Invalid uploadedFiles structure', uploadedFiles)
+        }
       }
     } catch (error) {
       console.log(error)
@@ -68,10 +81,12 @@ export function SignUp() {
         name: data.name,
         phone: data.phone,
         email: data.email,
-        avatarId: data.avatarId,
+        avatarId: registeredAvatarId,
         password: data.password,
         passwordConfirmation: data.passwordConfirmation,
       })
+
+      console.log(data.avatarId, 'data avatarId')
 
       toast.success('Usuário cadastrado com sucesso', {
         action: {
@@ -86,8 +101,12 @@ export function SignUp() {
 
   async function handleSignUp({ data, fileData }: SignUpForm) {
     try {
-      await handleSignUpInputs(data)
       await handleFileUpload(fileData)
+      if (!registeredAvatarId) {
+        console.error('Avatar ID is undefined')
+        return
+      }
+      await handleSignUpInputs(data)
       console.log(data, 'Data')
       console.log(fileData, 'FileData')
     } catch (err) {

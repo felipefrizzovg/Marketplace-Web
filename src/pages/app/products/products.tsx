@@ -64,8 +64,8 @@ export function Products() {
           </CardContent>
         </Card>
 
-        <div className="grid grid-cols-2 gap-4">
-          <Link to="/products-info">
+        <div>
+          <Link className="grid grid-cols-2 gap-4" to="/products-info">
             <Card className="relative rounded-t-3xl">
               <Badge
                 className="absolute right-20 top-1 z-10 bg-blue-dark"
@@ -95,156 +95,156 @@ export function Products() {
                 </p>
               </div>
             </Card>
+
+            <Card className="relative rounded-t-3xl">
+              <Badge
+                className="absolute right-20 top-1 z-10 bg-blue-dark"
+                variant="default"
+              >
+                Anunciado
+              </Badge>
+              <Badge
+                className="absolute right-4 top-1 z-10 bg-grayScale-400"
+                variant="default"
+              >
+                Móvel
+              </Badge>
+              <img src={camiseta} className="w-full" alt="" />
+              <div className="flex flex-col gap-2 p-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
+                    Camiseta masculina
+                  </h2>
+                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
+                    R$ 35,89
+                  </h3>
+                </div>
+                <p className="font-poppins text-sm font-normal text-grayScale-300">
+                  Camiseta básica cinza, confeccionada em algodão 100%, com
+                  corte slim fit e gola redonda.
+                </p>
+              </div>
+            </Card>
+
+            <Card className="relative rounded-t-3xl">
+              <Badge
+                className="absolute right-20 top-1 z-10 bg-blue-dark"
+                variant="default"
+              >
+                Anunciado
+              </Badge>
+              <Badge
+                className="absolute right-4 top-1 z-10 bg-grayScale-400"
+                variant="default"
+              >
+                Móvel
+              </Badge>
+              <img src={utensilios} className="w-full" alt="" />
+              <div className="flex flex-col gap-2 p-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
+                    Kit utensílios
+                  </h2>
+                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
+                    R$ 86,79
+                  </h3>
+                </div>
+                <p className="font-poppins text-sm font-normal text-grayScale-300">
+                  Conjunto com 10 de cozinha, feitos medeira de bambu.
+                </p>
+              </div>
+            </Card>
+
+            <Card className="relative rounded-t-3xl">
+              <Badge
+                className="absolute right-20 top-1 z-10 bg-blue-dark"
+                variant="default"
+              >
+                Anunciado
+              </Badge>
+              <Badge
+                className="absolute right-4 top-1 z-10 bg-grayScale-400"
+                variant="default"
+              >
+                Móvel
+              </Badge>
+              <img src={cremes} className="w-full" alt="" />
+              <div className="flex flex-col gap-2 p-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
+                    Kit de cremes
+                  </h2>
+                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
+                    R$ 159,90
+                  </h3>
+                </div>
+                <p className="font-poppins text-sm font-normal text-grayScale-300">
+                  Conjunto de cuidados com a pele contendo 3 cremes: hidratante
+                  facial, creme para as mãos e crememe anti-idade.
+                </p>
+              </div>
+            </Card>
+
+            <Card className="relative rounded-t-3xl">
+              <Badge
+                className="absolute right-20 top-1 z-10 bg-semantic-success"
+                variant="default"
+              >
+                Vendido
+              </Badge>
+              <Badge
+                className="absolute right-4 top-1 z-10 bg-grayScale-400"
+                variant="default"
+              >
+                Móvel
+              </Badge>
+              <img src={caderno} className="w-full" alt="" />
+              <div className="flex flex-col gap-2 p-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
+                    Caderno de desenho
+                  </h2>
+                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
+                    R$ 56,00
+                  </h3>
+                </div>
+                <p className="font-poppins text-sm font-normal text-grayScale-300">
+                  Caderno tamanho A4 com 120 páginas, gramatura de 180g/m²,
+                  ideal para técnicas variadas como lápis, carvão e tinta.
+                </p>
+              </div>
+            </Card>
+
+            <Card className="relative rounded-t-3xl">
+              <Badge
+                className="absolute right-20 top-1 z-10 bg-blue-dark"
+                variant="default"
+              >
+                Anunciado
+              </Badge>
+              <Badge
+                className="absolute right-4 top-1 z-10 bg-grayScale-400"
+                variant="default"
+              >
+                Móvel
+              </Badge>
+              <img src={brinquedo} className="w-full" alt="" />
+              <div className="flex flex-col gap-2 p-4">
+                <div className="flex items-center justify-between">
+                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
+                    Carro de brinquedo
+                  </h2>
+                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
+                    R$ 24,60
+                  </h3>
+                </div>
+                <p className="font-poppins text-sm font-normal text-grayScale-300">
+                  Carrinho de brinquedo na cor amarela, feito de metal, com
+                  detalhes realistas.
+                </p>
+              </div>
+            </Card>
           </Link>
-
-          <Card className="relative rounded-t-3xl">
-            <Badge
-              className="absolute right-20 top-1 z-10 bg-blue-dark"
-              variant="default"
-            >
-              Anunciado
-            </Badge>
-            <Badge
-              className="absolute right-4 top-1 z-10 bg-grayScale-400"
-              variant="default"
-            >
-              Móvel
-            </Badge>
-            <img src={camiseta} className="w-full" alt="" />
-            <div className="flex flex-col gap-2 p-4">
-              <div className="flex items-center justify-between">
-                <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                  Camiseta masculina
-                </h2>
-                <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                  R$ 35,89
-                </h3>
-              </div>
-              <p className="font-poppins text-sm font-normal text-grayScale-300">
-                Camiseta básica cinza, confeccionada em algodão 100%, com corte
-                slim fit e gola redonda.
-              </p>
-            </div>
-          </Card>
-
-          <Card className="relative rounded-t-3xl">
-            <Badge
-              className="absolute right-20 top-1 z-10 bg-blue-dark"
-              variant="default"
-            >
-              Anunciado
-            </Badge>
-            <Badge
-              className="absolute right-4 top-1 z-10 bg-grayScale-400"
-              variant="default"
-            >
-              Móvel
-            </Badge>
-            <img src={utensilios} className="w-full" alt="" />
-            <div className="flex flex-col gap-2 p-4">
-              <div className="flex items-center justify-between">
-                <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                  Kit utensílios
-                </h2>
-                <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                  R$ 86,79
-                </h3>
-              </div>
-              <p className="font-poppins text-sm font-normal text-grayScale-300">
-                Conjunto com 10 de cozinha, feitos medeira de bambu.
-              </p>
-            </div>
-          </Card>
-
-          <Card className="relative rounded-t-3xl">
-            <Badge
-              className="absolute right-20 top-1 z-10 bg-blue-dark"
-              variant="default"
-            >
-              Anunciado
-            </Badge>
-            <Badge
-              className="absolute right-4 top-1 z-10 bg-grayScale-400"
-              variant="default"
-            >
-              Móvel
-            </Badge>
-            <img src={cremes} className="w-full" alt="" />
-            <div className="flex flex-col gap-2 p-4">
-              <div className="flex items-center justify-between">
-                <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                  Kit de cremes
-                </h2>
-                <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                  R$ 159,90
-                </h3>
-              </div>
-              <p className="font-poppins text-sm font-normal text-grayScale-300">
-                Conjunto de cuidados com a pele contendo 3 cremes: hidratante
-                facial, creme para as mãos e crememe anti-idade.
-              </p>
-            </div>
-          </Card>
-
-          <Card className="relative rounded-t-3xl">
-            <Badge
-              className="absolute right-20 top-1 z-10 bg-semantic-success"
-              variant="default"
-            >
-              Vendido
-            </Badge>
-            <Badge
-              className="absolute right-4 top-1 z-10 bg-grayScale-400"
-              variant="default"
-            >
-              Móvel
-            </Badge>
-            <img src={caderno} className="w-full" alt="" />
-            <div className="flex flex-col gap-2 p-4">
-              <div className="flex items-center justify-between">
-                <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                  Caderno de desenho
-                </h2>
-                <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                  R$ 56,00
-                </h3>
-              </div>
-              <p className="font-poppins text-sm font-normal text-grayScale-300">
-                Caderno tamanho A4 com 120 páginas, gramatura de 180g/m², ideal
-                para técnicas variadas como lápis, carvão e tinta.
-              </p>
-            </div>
-          </Card>
-
-          <Card className="relative rounded-t-3xl">
-            <Badge
-              className="absolute right-20 top-1 z-10 bg-blue-dark"
-              variant="default"
-            >
-              Anunciado
-            </Badge>
-            <Badge
-              className="absolute right-4 top-1 z-10 bg-grayScale-400"
-              variant="default"
-            >
-              Móvel
-            </Badge>
-            <img src={brinquedo} className="w-full" alt="" />
-            <div className="flex flex-col gap-2 p-4">
-              <div className="flex items-center justify-between">
-                <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                  Carro de brinquedo
-                </h2>
-                <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                  R$ 24,60
-                </h3>
-              </div>
-              <p className="font-poppins text-sm font-normal text-grayScale-300">
-                Carrinho de brinquedo na cor amarela, feito de metal, com
-                detalhes realistas.
-              </p>
-            </div>
-          </Card>
         </div>
       </div>
     </>
