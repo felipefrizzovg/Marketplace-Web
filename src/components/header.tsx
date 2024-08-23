@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 
 import logo from '@/assets/logo.svg'
 
+import { AccountMenu } from './account-menu'
 import { NavLink } from './nav-link'
 import { Button } from './ui/button'
 
@@ -28,9 +29,7 @@ export function Header() {
           </Button>
         </Link>
 
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-shape-shape">
-          <img src="" alt="" />
-        </div>
+        <AccountMenu />
       </div>
     </header>
   )
