@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { ArrowRight } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -32,9 +32,11 @@ const signUpForm = z.object({
 export type SignUpForm = z.infer<typeof signUpForm>
 
 export function SignUp() {
-  const [registeredAvatarId, setRegisteredAvatarId] = useState('')
-
   const navigate = useNavigate()
+
+  const [registeredAvatarId, setRegisteredAvatarId] = useState({
+    registeredAvatarId: '',
+  })
 
   const methods = useForm<SignUpForm>()
 
@@ -58,14 +60,16 @@ export function SignUp() {
           files,
         })
 
-        console.log(uploadedFiles, 'uploadedFiles')
-
         if (
           uploadedFiles &&
           uploadedFiles.attachments &&
           uploadedFiles.attachments[0]
         ) {
-          setRegisteredAvatarId(uploadedFiles.attachments[0].id)
+          setRegisteredAvatarId((prevState) => ({
+            ...prevState,
+            registeredAvatarId: uploadedFiles.attachments[0].id,
+          }))
+          methods.setValue('data.avatarId', uploadedFiles.attachments[0].id)
         } else {
           console.error('Error: Invalid uploadedFiles structure', uploadedFiles)
         }
@@ -81,12 +85,12 @@ export function SignUp() {
         name: data.name,
         phone: data.phone,
         email: data.email,
-        avatarId: registeredAvatarId,
+        avatarId: data.avatarId,
         password: data.password,
         passwordConfirmation: data.passwordConfirmation,
       })
 
-      console.log(data.avatarId, 'data avatarId')
+      console.log(registeredAvatarId, 'data avatarId')
 
       toast.success('Usuário cadastrado com sucesso', {
         action: {
@@ -102,13 +106,11 @@ export function SignUp() {
   async function handleSignUp({ data, fileData }: SignUpForm) {
     try {
       await handleFileUpload(fileData)
-      if (!registeredAvatarId) {
-        console.error('Avatar ID is undefined')
-        return
-      }
+
       await handleSignUpInputs(data)
-      console.log(data, 'Data')
-      console.log(fileData, 'FileData')
+
+      console.log(data, fileData)
+      console.log(registeredAvatarId)
     } catch (err) {
       console.log(err)
     }
