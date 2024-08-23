@@ -12,7 +12,11 @@ interface UploadImagesResponse {
 }
 
 export async function uploadImages({ files }: UploadImagesBody): Promise<UploadImagesResponse> {
-  const attachments = await api.post<UploadImagesResponse>('/attachments', files)
+  try {
+    const attachments = await api.post<UploadImagesResponse>('/attachments', files)
 
-  return attachments.data
+    return attachments.data
+  } catch (error) {
+    throw error
+  }
 }

@@ -1,5 +1,7 @@
 import { ArrowLeft, Ban, Check, ImageUp } from 'lucide-react'
+import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { z } from 'zod'
 
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -14,7 +16,19 @@ import {
 } from '@/components/ui/select'
 import { Textarea } from '@/components/ui/textarea'
 
+const createNewProductBody = z.object({
+  title: z.string(),
+  categoryId: z.string().uuid(),
+  description: z.string(),
+  priceInCents: z.number(),
+  attachmentsIds: z.string().array(),
+})
+
+type CreateNewProductBody = z.infer<typeof createNewProductBody>
+
 export function NewProduct() {
+  const { register, handleSubmit } = useForm<CreateNewProductBody>()
+
   return (
     <>
       <div className="flex justify-between gap-6">
@@ -28,28 +42,11 @@ export function NewProduct() {
           </Link>
 
           <h1 className="font-sans text-2xl font-bold text-grayScale-500">
-            Editar produto
+            Novo produto
           </h1>
           <p className="font-poppins text-sm font-normal text-grayScale-300">
-            Gerencie as informações do produto cadastrado
+            Cadastre um produto para venda no marketplace
           </p>
-        </div>
-
-        <div className="flex items-end gap-4">
-          <button
-            type="button"
-            className="flex items-center gap-2 bg-transparent p-0 font-poppins text-sm font-medium text-orange-base hover:bg-inherit hover:text-orange-dark"
-          >
-            <Check />
-            Marcar como vendido
-          </button>
-          <button
-            type="button"
-            className="flex items-center gap-2 self-end bg-transparent p-0 font-poppins text-sm font-medium text-orange-base hover:bg-inherit hover:text-orange-dark"
-          >
-            <Ban />
-            Desativar anúncio
-          </button>
         </div>
       </div>
 

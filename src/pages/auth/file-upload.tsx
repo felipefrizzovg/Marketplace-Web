@@ -1,7 +1,9 @@
 import { ImageUp } from 'lucide-react'
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { z } from 'zod'
+
+import { SignUpForm } from './sign-up'
 
 const ACCEPTED_IMAGE_TYPES = ['image/png']
 
@@ -23,13 +25,27 @@ export type FileUploadForm = z.infer<typeof fileUploadForm>
 export function FileUpload() {
   const [filePreview, setFilePreview] = useState<string | null>(null)
 
-  const { register } = useForm<FileUploadForm>()
+  // Usando useFormContext para garantir que o formulário principal controle os registros
+  const { register } = useFormContext<SignUpForm>()
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
-    if (files && files[0]) {
-      setFilePreview(URL.createObjectURL(files[0]))
+    console.log(event.target.files)
+    if (!files || files.length === 0) {
+      console.error('No files selected')
+      return
     }
+
+    const file = files[0]
+    if (!file) {
+      console.error('File is undefined')
+      return
+    }
+
+    // Atualizando a pré-visualização da imagem
+    setFilePreview(URL.createObjectURL(file))
+
+    console.log('File selected:', file)
   }
 
   return (
@@ -44,7 +60,7 @@ export function FileUpload() {
         type="file"
         className="hidden"
         accept={ACCEPTED_IMAGE_TYPES.join(',')}
-        {...register('file', { onChange: onFileChange })}
+        {...register('fileData.file', { onChange: onFileChange })}
       />
     </label>
   )

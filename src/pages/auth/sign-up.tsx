@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query'
 import { ArrowRight } from 'lucide-react'
 import { Helmet } from 'react-helmet-async'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { z } from 'zod'
@@ -28,16 +28,12 @@ const signUpForm = z.object({
   fileData: fileUploadForm,
 })
 
-type SignUpForm = z.infer<typeof signUpForm>
+export type SignUpForm = z.infer<typeof signUpForm>
 
 export function SignUp() {
   const navigate = useNavigate()
 
-  const {
-    register,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<SignUpForm>()
+  const methods = useForm<SignUpForm>()
 
   const { mutateAsync: registerUserFn } = useMutation({
     mutationFn: registerUser,
@@ -51,13 +47,15 @@ export function SignUp() {
     try {
       if (data.file?.length && data.file.length > 0) {
         const files = new FormData()
-        files.append('file', data.file[0])
+        files.append('files', data.file[0])
+
+        console.log(files, 'files')
 
         const uploadedFiles = await uploadImagesFn({
           files,
         })
 
-        console.log(uploadedFiles)
+        console.log(uploadedFiles, 'uploadedFiles')
       }
     } catch (error) {
       console.log(error)
@@ -90,6 +88,8 @@ export function SignUp() {
     try {
       await handleSignUpInputs(data)
       await handleFileUpload(fileData)
+      console.log(data, 'Data')
+      console.log(fileData, 'FileData')
     } catch (err) {
       console.log(err)
     }
@@ -109,109 +109,111 @@ export function SignUp() {
                 Informe os seus dados pessoais e de acesso
               </p>
             </div>
-            <form
-              onSubmit={handleSubmit(handleSignUp)}
-              className="flex flex-col gap-12"
-            >
-              <div className="flex flex-col gap-5">
-                <div className="flex flex-col">
-                  <h3 className="mb-5 font-sans text-lg font-bold">Perfil</h3>
-                  <FileUpload />
-                </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="name"
-                    className="font-poppins text-xs font-medium uppercase text-grayScale-300"
-                  >
-                    Nome
-                  </label>
-                  <input
-                    id="name"
-                    type="text"
-                    placeholder="Seu nome completo"
-                    className="border-b-2 p-3"
-                    {...register('data.name')}
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="phone"
-                    className="font-poppins text-xs font-medium uppercase text-grayScale-300"
-                  >
-                    Telefone
-                  </label>
-                  <input
-                    id="phone"
-                    type="text"
-                    placeholder="(00) 00000-0000"
-                    className="border-b-2 p-3"
-                    {...register('data.phone')}
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-col gap-5">
-                <div className="flex flex-col">
-                  <h3 className="mb-5 font-sans text-lg font-bold">Acesso</h3>
-                  <label
-                    htmlFor="email"
-                    className="font-poppins text-xs font-medium uppercase text-grayScale-300"
-                  >
-                    E-mail
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    placeholder="Seu e-mail cadastrado"
-                    className="border-b-2 p-3"
-                    {...register('data.email')}
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="password"
-                    className="font-poppins text-xs font-medium uppercase text-grayScale-300"
-                  >
-                    Senha
-                  </label>
-                  <input
-                    id="password"
-                    type="password"
-                    placeholder="Sua senha de acesso"
-                    className="border-b-2 p-3"
-                    {...register('data.password')}
-                  />
-                </div>
-
-                <div className="flex flex-col">
-                  <label
-                    htmlFor="passwordConfirmation"
-                    className="font-poppins text-xs font-medium uppercase text-grayScale-300"
-                  >
-                    Confirmar senha
-                  </label>
-                  <input
-                    id="passwordConfirmation"
-                    type="password"
-                    placeholder="Confirme a senha"
-                    className="border-b-2 p-3"
-                    {...register('data.passwordConfirmation')}
-                  />
-                </div>
-              </div>
-
-              <Button
-                disabled={isSubmitting}
-                type="submit"
-                className="mb-20 h-14 w-full justify-between bg-orange-base p-5 hover:bg-orange-dark"
+            <FormProvider {...methods}>
+              <form
+                onSubmit={methods.handleSubmit(handleSignUp)}
+                className="flex flex-col gap-12"
               >
-                Cadastrar
-                <ArrowRight />
-              </Button>
-            </form>
+                <div className="flex flex-col gap-5">
+                  <div className="flex flex-col">
+                    <h3 className="mb-5 font-sans text-lg font-bold">Perfil</h3>
+                    <FileUpload />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="name"
+                      className="font-poppins text-xs font-medium uppercase text-grayScale-300"
+                    >
+                      Nome
+                    </label>
+                    <input
+                      id="name"
+                      type="text"
+                      placeholder="Seu nome completo"
+                      className="border-b-2 p-3"
+                      {...methods.register('data.name')}
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="phone"
+                      className="font-poppins text-xs font-medium uppercase text-grayScale-300"
+                    >
+                      Telefone
+                    </label>
+                    <input
+                      id="phone"
+                      type="text"
+                      placeholder="(00) 00000-0000"
+                      className="border-b-2 p-3"
+                      {...methods.register('data.phone')}
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-5">
+                  <div className="flex flex-col">
+                    <h3 className="mb-5 font-sans text-lg font-bold">Acesso</h3>
+                    <label
+                      htmlFor="email"
+                      className="font-poppins text-xs font-medium uppercase text-grayScale-300"
+                    >
+                      E-mail
+                    </label>
+                    <input
+                      id="email"
+                      type="email"
+                      placeholder="Seu e-mail cadastrado"
+                      className="border-b-2 p-3"
+                      {...methods.register('data.email')}
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="password"
+                      className="font-poppins text-xs font-medium uppercase text-grayScale-300"
+                    >
+                      Senha
+                    </label>
+                    <input
+                      id="password"
+                      type="password"
+                      placeholder="Sua senha de acesso"
+                      className="border-b-2 p-3"
+                      {...methods.register('data.password')}
+                    />
+                  </div>
+
+                  <div className="flex flex-col">
+                    <label
+                      htmlFor="passwordConfirmation"
+                      className="font-poppins text-xs font-medium uppercase text-grayScale-300"
+                    >
+                      Confirmar senha
+                    </label>
+                    <input
+                      id="passwordConfirmation"
+                      type="password"
+                      placeholder="Confirme a senha"
+                      className="border-b-2 p-3"
+                      {...methods.register('data.passwordConfirmation')}
+                    />
+                  </div>
+                </div>
+
+                <Button
+                  disabled={methods.formState.isSubmitting}
+                  type="submit"
+                  className="mb-20 h-14 w-full justify-between bg-orange-base p-5 hover:bg-orange-dark"
+                >
+                  Cadastrar
+                  <ArrowRight />
+                </Button>
+              </form>
+            </FormProvider>
           </div>
           <div>
             <p className="mb-5 font-poppins text-base font-normal text-grayScale-300">
@@ -219,7 +221,7 @@ export function SignUp() {
             </p>
             <Button
               asChild
-              disabled={isSubmitting}
+              disabled={methods.formState.isSubmitting}
               className="h-14 w-full justify-between bg-shape-white p-5 text-orange-base outline outline-orange-base hover:bg-shape-white hover:text-orange-dark hover:outline-orange-dark"
             >
               <Link to="/sign-in">
