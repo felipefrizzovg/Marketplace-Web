@@ -1,11 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
+import { Helmet } from 'react-helmet-async'
 import { Link } from 'react-router-dom'
 
-import brinquedo from '@/assets/brinquedo.png'
-import caderno from '@/assets/caderno.png'
-import camiseta from '@/assets/camiseta.png'
-import cremes from '@/assets/cremes.png'
-import sofa from '@/assets/sofa.png'
-import utensilios from '@/assets/utensilios.png'
+import { getSellerProducts } from '@/api/get-seller-products'
+import { ProductStatus } from '@/components/order-status'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -19,8 +17,14 @@ import {
 } from '@/components/ui/select'
 
 export function Products() {
+  const { data: productsResponse } = useQuery({
+    queryFn: getSellerProducts,
+    queryKey: ['products'],
+  })
+
   return (
     <>
+      <Helmet title="Products" />
       <h1 className="font-sans text-2xl font-bold text-grayScale-500">
         Seus produtos
       </h1>
@@ -66,184 +70,45 @@ export function Products() {
 
         <div>
           <Link className="grid grid-cols-2 gap-4" to="/products-info">
-            <Card className="relative rounded-t-3xl">
-              <Badge
-                className="absolute right-20 top-1 z-10 bg-blue-dark"
-                variant="default"
-              >
-                Anunciado
-              </Badge>
-              <Badge
-                className="absolute right-4 top-1 z-10 bg-grayScale-400"
-                variant="default"
-              >
-                Móvel
-              </Badge>
-              <img src={sofa} className="w-full" alt="" />
-              <div className="flex flex-col gap-2 p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                    Sofá
-                  </h2>
-                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                    R$ 1200,90
-                  </h3>
-                </div>
-                <p className="font-poppins text-sm font-normal text-grayScale-300">
-                  Sofá revestido em couro legítimo, com estrutura em madeira
-                  maciça e pés em metal cromado.
-                </p>
-              </div>
-            </Card>
-
-            <Card className="relative rounded-t-3xl">
-              <Badge
-                className="absolute right-20 top-1 z-10 bg-blue-dark"
-                variant="default"
-              >
-                Anunciado
-              </Badge>
-              <Badge
-                className="absolute right-4 top-1 z-10 bg-grayScale-400"
-                variant="default"
-              >
-                Móvel
-              </Badge>
-              <img src={camiseta} className="w-full" alt="" />
-              <div className="flex flex-col gap-2 p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                    Camiseta masculina
-                  </h2>
-                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                    R$ 35,89
-                  </h3>
-                </div>
-                <p className="font-poppins text-sm font-normal text-grayScale-300">
-                  Camiseta básica cinza, confeccionada em algodão 100%, com
-                  corte slim fit e gola redonda.
-                </p>
-              </div>
-            </Card>
-
-            <Card className="relative rounded-t-3xl">
-              <Badge
-                className="absolute right-20 top-1 z-10 bg-blue-dark"
-                variant="default"
-              >
-                Anunciado
-              </Badge>
-              <Badge
-                className="absolute right-4 top-1 z-10 bg-grayScale-400"
-                variant="default"
-              >
-                Móvel
-              </Badge>
-              <img src={utensilios} className="w-full" alt="" />
-              <div className="flex flex-col gap-2 p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                    Kit utensílios
-                  </h2>
-                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                    R$ 86,79
-                  </h3>
-                </div>
-                <p className="font-poppins text-sm font-normal text-grayScale-300">
-                  Conjunto com 10 de cozinha, feitos medeira de bambu.
-                </p>
-              </div>
-            </Card>
-
-            <Card className="relative rounded-t-3xl">
-              <Badge
-                className="absolute right-20 top-1 z-10 bg-blue-dark"
-                variant="default"
-              >
-                Anunciado
-              </Badge>
-              <Badge
-                className="absolute right-4 top-1 z-10 bg-grayScale-400"
-                variant="default"
-              >
-                Móvel
-              </Badge>
-              <img src={cremes} className="w-full" alt="" />
-              <div className="flex flex-col gap-2 p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                    Kit de cremes
-                  </h2>
-                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                    R$ 159,90
-                  </h3>
-                </div>
-                <p className="font-poppins text-sm font-normal text-grayScale-300">
-                  Conjunto de cuidados com a pele contendo 3 cremes: hidratante
-                  facial, creme para as mãos e crememe anti-idade.
-                </p>
-              </div>
-            </Card>
-
-            <Card className="relative rounded-t-3xl">
-              <Badge
-                className="absolute right-20 top-1 z-10 bg-semantic-success"
-                variant="default"
-              >
-                Vendido
-              </Badge>
-              <Badge
-                className="absolute right-4 top-1 z-10 bg-grayScale-400"
-                variant="default"
-              >
-                Móvel
-              </Badge>
-              <img src={caderno} className="w-full" alt="" />
-              <div className="flex flex-col gap-2 p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                    Caderno de desenho
-                  </h2>
-                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                    R$ 56,00
-                  </h3>
-                </div>
-                <p className="font-poppins text-sm font-normal text-grayScale-300">
-                  Caderno tamanho A4 com 120 páginas, gramatura de 180g/m²,
-                  ideal para técnicas variadas como lápis, carvão e tinta.
-                </p>
-              </div>
-            </Card>
-
-            <Card className="relative rounded-t-3xl">
-              <Badge
-                className="absolute right-20 top-1 z-10 bg-blue-dark"
-                variant="default"
-              >
-                Anunciado
-              </Badge>
-              <Badge
-                className="absolute right-4 top-1 z-10 bg-grayScale-400"
-                variant="default"
-              >
-                Móvel
-              </Badge>
-              <img src={brinquedo} className="w-full" alt="" />
-              <div className="flex flex-col gap-2 p-4">
-                <div className="flex items-center justify-between">
-                  <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                    Carro de brinquedo
-                  </h2>
-                  <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                    R$ 24,60
-                  </h3>
-                </div>
-                <p className="font-poppins text-sm font-normal text-grayScale-300">
-                  Carrinho de brinquedo na cor amarela, feito de metal, com
-                  detalhes realistas.
-                </p>
-              </div>
-            </Card>
+            {productsResponse &&
+              productsResponse.products.map((product) => {
+                return (
+                  <>
+                    <Card className="relative rounded-t-3xl">
+                      <div className="absolute right-2 top-2 z-10 flex gap-2">
+                        <ProductStatus status="sold" />
+                        <Badge
+                          className="right-4 top-1 z-10 bg-grayScale-400"
+                          variant="default"
+                        >
+                          {product.category.title}
+                        </Badge>
+                      </div>
+                      <img
+                        src={product.attachments[0].url}
+                        className="h-[350px] w-full"
+                        alt=""
+                      />
+                      <div className="flex flex-col gap-2 p-4">
+                        <div className="flex items-center justify-between">
+                          <h2 className="font-poppins text-base font-semibold text-grayScale-400">
+                            {product.title}
+                          </h2>
+                          <h3 className="font-sans text-lg font-bold text-grayScale-500">
+                            {product.priceInCents.toLocaleString('pt-BR', {
+                              style: 'currency',
+                              currency: 'BRL',
+                            })}
+                          </h3>
+                        </div>
+                        <p className="font-poppins text-sm font-normal text-grayScale-300">
+                          {product.description}
+                        </p>
+                      </div>
+                    </Card>
+                  </>
+                )
+              })}
           </Link>
         </div>
       </div>
