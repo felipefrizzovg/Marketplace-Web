@@ -1,3 +1,7 @@
+import { useQuery } from '@tanstack/react-query'
+import { subDays } from 'date-fns'
+import { useState } from 'react'
+import { DateRange } from 'react-day-picker'
 import {
   CartesianGrid,
   Line,
@@ -8,65 +12,64 @@ import {
 } from 'recharts'
 import colors from 'tailwindcss/colors'
 
+import { getDailyViews } from '@/api/get-daily-views'
+import { DateRangePicker } from '@/components/date-range-picker'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-const data = [
-  { day: '01', visitors: 152 },
-  { day: '02', visitors: 123 },
-  { day: '03', visitors: 786 },
-  { day: '04', visitors: 189 },
-  { day: '05', visitors: 50 },
-  { day: '06', visitors: 856 },
-  { day: '07', visitors: 70 },
-  { day: '08', visitors: 567 },
-  { day: '09', visitors: 90 },
-  { day: '10', visitors: 4 },
-  { day: '11', visitors: 110 },
-  { day: '12', visitors: 741 },
-  { day: '13', visitors: 130 },
-  { day: '14', visitors: 140 },
-  { day: '15', visitors: 150 },
-  { day: '16', visitors: 2231 },
-  { day: '17', visitors: 170 },
-  { day: '18', visitors: 24 },
-  { day: '19', visitors: 190 },
-  { day: '20', visitors: 200 },
-  { day: '21', visitors: 210 },
-  { day: '22', visitors: 78 },
-  { day: '23', visitors: 230 },
-  { day: '24', visitors: 41 },
-  { day: '25', visitors: 250 },
-  { day: '26', visitors: 260 },
-  { day: '27', visitors: 465 },
-  { day: '28', visitors: 280 },
-  { day: '29', visitors: 290 },
-]
-
 export function VisitorsChart() {
+  const [dateRange, setDateRange] = useState<DateRange | undefined>({
+    from: subDays(new Date(), 31),
+    to: new Date(),
+  })
+
+  const { data: dailyViews } = useQuery({
+    queryFn: () =>
+      getDailyViews({
+        from: dateRange.from,
+        to: dateRange.to,
+      }),
+    queryKey: ['metrics', 'daily-views', dateRange],
+  })
+
+  const formattedData = dailyViews?.viewsPerDay.map((view) => {
+    const dateObject = new Date(view.date)
+    const day = dateObject.getUTCDate().toString().padStart(2, '0') // Extrai o dia e adiciona um zero à esquerda se necessário
+    return {
+      ...view,
+      date: day, // Altera o valor de `date` para conter apenas o dia
+    }
+  })
+
   return (
     <Card className="col-span-7 p-6">
       <CardHeader className="flex-row items-center justify-between p-0 pb-7">
         <CardTitle className="font-sans text-lg font-bold text-grayScale-500">
           Visitantes
         </CardTitle>
+
+        <div className="flex items-center gap-3">
+          <DateRangePicker date={dateRange} onDateChange={setDateRange} />
+        </div>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={240}>
-          <LineChart data={data} style={{ fontSize: 12 }}>
-            <XAxis dataKey="day" tickLine={false} axisLine={false} dy={16} />
+        {dailyViews && (
+          <ResponsiveContainer width="100%" height={240}>
+            <LineChart data={formattedData} style={{ fontSize: 12 }}>
+              <XAxis dataKey="date" tickLine={false} axisLine={false} dy={16} />
 
-            <YAxis stroke="#949494" axisLine={false} tickLine={false} />
+              <YAxis stroke="#949494" axisLine={false} tickLine={false} />
 
-            <CartesianGrid vertical={false} strokeDasharray="3" />
+              <CartesianGrid vertical={false} strokeDasharray="3" />
 
-            <Line
-              type="monotone"
-              strokeWidth={2}
-              dataKey="visitors"
-              stroke={colors.blue['500']}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+              <Line
+                type="monotone"
+                strokeWidth={2}
+                dataKey="amount"
+                stroke={colors.blue['500']}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
       </CardContent>
     </Card>
   )
