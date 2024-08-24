@@ -4,7 +4,7 @@ interface UploadImagesBody {
   files: FormData
 }
 
-interface UploadImagesResponse {
+export interface UploadImagesResponse {
   attachments: {
     id: string;
     url: string;

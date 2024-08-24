@@ -23,10 +23,9 @@ export const fileUploadForm = z.object({
 export type FileUploadForm = z.infer<typeof fileUploadForm>
 
 export function FileUpload() {
-  const [filePreview, setFilePreview] = useState<string | null>(null)
-
-  // Usando useFormContext para garantir que o formulário principal controle os registros
   const { register } = useFormContext<SignUpForm>()
+
+  const [filePreview, setFilePreview] = useState<string | null>(null)
 
   const onFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
@@ -42,7 +41,6 @@ export function FileUpload() {
       return
     }
 
-    // Atualizando a pré-visualização da imagem
     setFilePreview(URL.createObjectURL(file))
 
     console.log('File selected:', file)

@@ -1,6 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
 import { ArrowRight } from 'lucide-react'
-import { useEffect, useState } from 'react'
 import { Helmet } from 'react-helmet-async'
 import { FormProvider, useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
@@ -34,10 +33,6 @@ export type SignUpForm = z.infer<typeof signUpForm>
 export function SignUp() {
   const navigate = useNavigate()
 
-  const [registeredAvatarId, setRegisteredAvatarId] = useState({
-    registeredAvatarId: '',
-  })
-
   const methods = useForm<SignUpForm>()
 
   const { mutateAsync: registerUserFn } = useMutation({
@@ -47,6 +42,8 @@ export function SignUp() {
   const { mutateAsync: uploadImagesFn } = useMutation({
     mutationFn: uploadImages,
   })
+
+  let avatarIdGlobal: string
 
   async function handleFileUpload(data: FileUploadForm) {
     try {
@@ -65,11 +62,8 @@ export function SignUp() {
           uploadedFiles.attachments &&
           uploadedFiles.attachments[0]
         ) {
-          setRegisteredAvatarId((prevState) => ({
-            ...prevState,
-            registeredAvatarId: uploadedFiles.attachments[0].id,
-          }))
           methods.setValue('data.avatarId', uploadedFiles.attachments[0].id)
+          avatarIdGlobal = uploadedFiles.attachments[0].id
         } else {
           console.error('Error: Invalid uploadedFiles structure', uploadedFiles)
         }
@@ -85,12 +79,12 @@ export function SignUp() {
         name: data.name,
         phone: data.phone,
         email: data.email,
-        avatarId: data.avatarId,
+        avatarId: avatarIdGlobal,
         password: data.password,
         passwordConfirmation: data.passwordConfirmation,
       })
 
-      console.log(registeredAvatarId, 'data avatarId')
+      console.log(avatarIdGlobal, 'data avatarId')
 
       toast.success('Usuário cadastrado com sucesso', {
         action: {
@@ -108,9 +102,6 @@ export function SignUp() {
       await handleFileUpload(fileData)
 
       await handleSignUpInputs(data)
-
-      console.log(data, fileData)
-      console.log(registeredAvatarId)
     } catch (err) {
       console.log(err)
     }
