@@ -1,6 +1,6 @@
 import { api } from "@/lib/axios"; 
 
-interface EditProductData {
+export interface EditProductData {
   title: string; 
   categoryId: string;  
   description: string; 

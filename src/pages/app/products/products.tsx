@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async'
 import { Link, useSearchParams } from 'react-router-dom'
 
 import { getSellerProducts } from '@/api/get-seller-products'
-import { ProductStatus } from '@/components/order-status'
+import { ProductStatus } from '@/components/product-status'
 import { Badge } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 
@@ -40,7 +40,7 @@ export function Products() {
                   {/* Envolva cada Card em um Link individual */}
                   <Card className="relative rounded-t-3xl">
                     <div className="absolute right-2 top-2 z-10 flex gap-2">
-                      <ProductStatus status={searchParams.get('status')} />
+                      <ProductStatus status={product.status} />
                       <Badge
                         className="right-4 top-1 z-10 bg-grayScale-400"
                         variant="default"
