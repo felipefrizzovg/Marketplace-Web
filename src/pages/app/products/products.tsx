@@ -32,48 +32,47 @@ export function Products() {
       <div className="flex gap-6">
         <ProductsFilters />
 
-        <div>
-          <Link className="grid grid-cols-2 gap-4" to="/products-info">
-            {productsResponse &&
-              productsResponse.products.map((product) => {
-                return (
-                  <>
-                    <Card className="relative rounded-t-3xl">
-                      <div className="absolute right-2 top-2 z-10 flex gap-2">
-                        <ProductStatus status={searchParams.get('status')} />
-                        <Badge
-                          className="right-4 top-1 z-10 bg-grayScale-400"
-                          variant="default"
-                        >
-                          {product.category.title}
-                        </Badge>
+        <div className="grid grid-cols-2 gap-4">
+          {productsResponse &&
+            productsResponse.products.map((product) => {
+              return (
+                <Link to={`/products-info/${product.id}`} key={product.id}>
+                  {/* Envolva cada Card em um Link individual */}
+                  <Card className="relative rounded-t-3xl">
+                    <div className="absolute right-2 top-2 z-10 flex gap-2">
+                      <ProductStatus status={searchParams.get('status')} />
+                      <Badge
+                        className="right-4 top-1 z-10 bg-grayScale-400"
+                        variant="default"
+                      >
+                        {product.category.title}
+                      </Badge>
+                    </div>
+                    <img
+                      src={product.attachments[0].url}
+                      className="h-[350px] w-full rounded-md"
+                      alt=""
+                    />
+                    <div className="flex flex-col gap-2 p-4">
+                      <div className="flex items-center justify-between">
+                        <h2 className="font-poppins text-base font-semibold text-grayScale-400">
+                          {product.title}
+                        </h2>
+                        <h3 className="font-sans text-lg font-bold text-grayScale-500">
+                          {product.priceInCents.toLocaleString('pt-BR', {
+                            style: 'currency',
+                            currency: 'BRL',
+                          })}
+                        </h3>
                       </div>
-                      <img
-                        src={product.attachments[0].url}
-                        className="h-[350px] w-full rounded-md"
-                        alt=""
-                      />
-                      <div className="flex flex-col gap-2 p-4">
-                        <div className="flex items-center justify-between">
-                          <h2 className="font-poppins text-base font-semibold text-grayScale-400">
-                            {product.title}
-                          </h2>
-                          <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                            {product.priceInCents.toLocaleString('pt-BR', {
-                              style: 'currency',
-                              currency: 'BRL',
-                            })}
-                          </h3>
-                        </div>
-                        <p className="font-poppins text-sm font-normal text-grayScale-300">
-                          {product.description}
-                        </p>
-                      </div>
-                    </Card>
-                  </>
-                )
-              })}
-          </Link>
+                      <p className="font-poppins text-sm font-normal text-grayScale-300">
+                        {product.description}
+                      </p>
+                    </div>
+                  </Card>
+                </Link>
+              )
+            })}
         </div>
       </div>
     </>
