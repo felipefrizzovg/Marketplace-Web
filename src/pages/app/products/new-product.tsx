@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { ArrowLeft, ImageUp } from 'lucide-react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 import { z } from 'zod'
@@ -45,17 +46,19 @@ export function NewProduct() {
     queryFn: getCategories,
   })
 
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null)
+
   const {
     register,
     handleSubmit,
     setValue,
-    watch,
     formState: { errors },
     setError,
   } = useForm<CreateNewProductBody>()
 
   const onSubmit = async (data: CreateNewProductBody) => {
-    const files = watch('attachmentsIds') as FileList
+    const files = selectedFiles
 
     if (files && files.length > 0) {
       const formData = new FormData()
@@ -91,6 +94,25 @@ export function NewProduct() {
     }
   }
 
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files as FileList
+
+    if (files && files.length > 0) {
+      const file = files[0]
+
+      if (ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+        const imageUrl = URL.createObjectURL(file)
+        setImagePreview(imageUrl)
+        setSelectedFiles(files) // Use estado para armazenar arquivos
+      } else {
+        setError('attachmentsIds', {
+          type: 'manual',
+          message: 'Apenas imagens PNG são permitidas.',
+        })
+      }
+    }
+  }
+
   return (
     <>
       <div className="flex justify-between gap-6">
@@ -113,17 +135,27 @@ export function NewProduct() {
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="mt-10 flex gap-6">
-        <div>
+        <div className="flex flex-col items-center">
           <label className="flex h-[350px] w-[420px] cursor-pointer flex-col items-center justify-center gap-4 rounded-[20px] bg-shape-shape">
-            <ImageUp className="h-10 w-10 text-orange-base" />
-            <span className="font-poppins text-sm text-grayScale-300">
-              Selecione a imagem do produto
-            </span>
+            {imagePreview ? (
+              <img
+                src={imagePreview}
+                alt="Pré-visualização da imagem"
+                className="h-full w-full rounded-[20px] object-cover"
+              />
+            ) : (
+              <>
+                <ImageUp className="h-10 w-10 text-orange-base" />
+                <span className="font-poppins text-sm text-grayScale-300">
+                  Selecione a imagem do produto
+                </span>
+              </>
+            )}
             <input
               type="file"
               className="hidden"
               {...register('attachmentsIds')}
-              multiple
+              onChange={handleImageChange}
             />
           </label>
           {errors.attachmentsIds && (

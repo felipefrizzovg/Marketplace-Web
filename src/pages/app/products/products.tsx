@@ -50,7 +50,7 @@ export function Products() {
                       </div>
                       <img
                         src={product.attachments[0].url}
-                        className="h-[350px] w-full"
+                        className="h-[350px] w-full rounded-md"
                         alt=""
                       />
                       <div className="flex flex-col gap-2 p-4">
