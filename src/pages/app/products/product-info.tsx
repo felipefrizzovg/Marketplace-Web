@@ -1,7 +1,9 @@
+import { useQuery } from '@tanstack/react-query'
 import { ArrowLeft, Ban, Check } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
-import sofa from '@/assets/sofa.png'
+import { Category, getCategories } from '@/api/get-categories'
+import { getProductById } from '@/api/get-product-by-id'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -17,6 +19,28 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 
 export function ProductInfo() {
+  const { id } = useParams<{ id: string }>() // Captura o 'id' da URL
+
+  // Faz a requisição para buscar os dados do produto pelo ID
+  const { data: product, isLoading: productLoading } = useQuery({
+    queryFn: () => getProductById(id!),
+    queryKey: ['product', id],
+  })
+
+  // Faz a requisição para buscar as categorias
+  const { data: categoriesData, isLoading: categoriesLoading } = useQuery({
+    queryFn: getCategories,
+    queryKey: ['categories'],
+  })
+
+  if (productLoading || categoriesLoading) {
+    return <div>Carregando...</div>
+  }
+
+  if (!product) {
+    return <div>Produto não encontrado</div>
+  }
+
   return (
     <>
       <div className="flex justify-between gap-6">
@@ -56,7 +80,11 @@ export function ProductInfo() {
       </div>
 
       <div className="mt-10 flex gap-6">
-        <img className="h-[300px] w-[500px]" src={sofa} alt="" />
+        <img
+          className="h-[300px] w-[500px]"
+          src={product.attachments[0].url}
+          alt={product.title}
+        />
         <Card className="flex grow flex-col gap-6 p-6">
           <CardHeader className="p-0">
             <CardTitle className="flex justify-between font-sans text-lg font-bold text-grayScale-300">
@@ -74,14 +102,14 @@ export function ProductInfo() {
                     <Label className="font-poppins text-xs font-medium uppercase text-grayScale-300">
                       Título
                     </Label>
-                    <Input className="" />
+                    <Input defaultValue={product.title} className="" />
                   </div>
 
                   <div className="flex-1">
                     <Label className="font-poppins text-xs font-medium uppercase text-grayScale-300">
                       Valor
                     </Label>
-                    <Input />
+                    <Input defaultValue={product.priceInCents} />
                   </div>
                 </div>
 
@@ -89,32 +117,32 @@ export function ProductInfo() {
                   <Label className="font-poppins text-xs font-medium uppercase text-grayScale-300">
                     Descrição
                   </Label>
-                  <Textarea />
+                  <Textarea defaultValue={product.description} />
                 </div>
 
                 <div>
                   <Label className="font-poppins text-xs font-medium uppercase text-grayScale-300">
                     Categoria
                   </Label>
-                  <Select>
+                  <Select
+                    defaultValue={product.category.id}
+                    // Lida com a alteração de categoria se necessário
+                    onValueChange={(value) =>
+                      console.log('Categoria selecionada:', value)
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue
-                        placeholder="Categoria"
+                        placeholder={product.category.title}
                         className="placeholder:text-grayScale-200"
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem
-                        className="text-grayScale-400"
-                        value="Brinquedo"
-                      >
-                        Brinquedo
-                      </SelectItem>
-                      <SelectItem value="Móvel">Móvel</SelectItem>
-                      <SelectItem value="Papelaria">Papelaria</SelectItem>
-                      <SelectItem value="Saúde">Saúde & Beleza</SelectItem>
-                      <SelectItem value="Utensílio">Utensílio</SelectItem>
-                      <SelectItem value="Vestuário">Vestuário</SelectItem>
+                      {categoriesData?.categories.map((category: Category) => (
+                        <SelectItem key={category.id} value={category.id}>
+                          {category.title}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>

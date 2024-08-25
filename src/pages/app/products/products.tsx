@@ -59,10 +59,13 @@ export function Products() {
                           {product.title}
                         </h2>
                         <h3 className="font-sans text-lg font-bold text-grayScale-500">
-                          {product.priceInCents.toLocaleString('pt-BR', {
-                            style: 'currency',
-                            currency: 'BRL',
-                          })}
+                          {(product.priceInCents / 100).toLocaleString(
+                            'pt-BR',
+                            {
+                              style: 'currency',
+                              currency: 'BRL',
+                            },
+                          )}
                         </h3>
                       </div>
                       <p className="font-poppins text-sm font-normal text-grayScale-300">
