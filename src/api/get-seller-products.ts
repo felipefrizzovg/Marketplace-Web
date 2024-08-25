@@ -28,12 +28,17 @@ export interface GetSellerProductsResponse {
   }[]
 }
 
-export interface GetSellerProductsResponseParams {
-  status: "available" | "sold" | "cancelled"
-  search: string
+export interface GetSellerProductsParams {
+  status: string | null
+  search: string | null
 }
 
-export async function getSellerProducts() {
-  const response = await api.get<GetSellerProductsResponse>('/products/me')
+export async function getSellerProducts({ status, search }: GetSellerProductsParams) {
+  const response = await api.get<GetSellerProductsResponse>('/products/me', {
+    params: {
+      status,
+      search
+    }
+  })
   return response.data
 }
