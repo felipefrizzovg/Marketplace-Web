@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String  @id @default(uuid())
+  name     String
+  email    String  @unique
+  phone    String  @unique
+  password String
+  avatarId String? @map("avatar_id")
+
+  avatar   Attachment? @relation(fields: [avatarId], references: [id])
+  products Product[]   @relation(name: "product_owner")
+  View     View[]
+
+  @@map("users")
+}
+
+model Attachment {
+  id   String @id @default(uuid())
+  path String
+
+  users    User[]
+  products Product[]
+
+  @@map("attachments")
+}
+
+model Category {
+  id    String @id @default(uuid())
+  title String
+  slug  String @unique
+
+  products Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  id           String   @id @default(uuid())
+  ownerId      String   @map("owner_id")
+  title        String
+  description  String
+  status       String
+  priceInCents Int      @map("price_in_cents")
+  categoryId   String   @map("category_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  category    Category     @relation(fields: [categoryId], references: [id])
+  owner       User         @relation(name: "product_owner", fields: [ownerId], references: [id])
+  attachments Attachment[]
+  views       View[]
+
+  @@map("products")
+}
+
+model View {
+  id        String   @id @default(uuid())
+  viewerId  String   @map("viewer_id")
+  productId String   @map("product_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  product Product @relation(fields: [productId], references: [id])
+  viewer  User    @relation(fields: [viewerId], references: [id])
+
+  @@map("views")
+  @@unique([viewerId, productId])
+}
