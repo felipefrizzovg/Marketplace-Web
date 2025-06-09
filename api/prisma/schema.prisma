@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -9,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
+  id       String  @id
   name     String
   email    String  @unique
   phone    String  @unique
@@ -18,13 +17,13 @@ model User {
 
   avatar   Attachment? @relation(fields: [avatarId], references: [id])
   products Product[]   @relation(name: "product_owner")
-  View     View[]
+  views    View[]
 
   @@map("users")
 }
 
 model Attachment {
-  id   String @id @default(uuid())
+  id   String @id
   path String
 
   users    User[]
@@ -34,7 +33,7 @@ model Attachment {
 }
 
 model Category {
-  id    String @id @default(uuid())
+  id    String @id
   title String
   slug  String @unique
 
@@ -44,11 +43,11 @@ model Category {
 }
 
 model Product {
-  id           String   @id @default(uuid())
+  id           String   @id
   ownerId      String   @map("owner_id")
   title        String
   description  String
-  status       String
+  status       String // AVAILABLE | SOLD | CANCELLED
   priceInCents Int      @map("price_in_cents")
   categoryId   String   @map("category_id")
   createdAt    DateTime @default(now()) @map("created_at")
@@ -62,7 +61,7 @@ model Product {
 }
 
 model View {
-  id        String   @id @default(uuid())
+  id        String   @id
   viewerId  String   @map("viewer_id")
   productId String   @map("product_id")
   createdAt DateTime @default(now()) @map("created_at")
@@ -70,6 +69,6 @@ model View {
   product Product @relation(fields: [productId], references: [id])
   viewer  User    @relation(fields: [viewerId], references: [id])
 
-  @@map("views")
   @@unique([viewerId, productId])
+  @@map("views")
 }
